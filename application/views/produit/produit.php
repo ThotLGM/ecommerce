@@ -12,14 +12,17 @@
                         <p><?= $produit->description ?></p>
                     </div>
                     <div class="ratings">
-                        <p class="pull-right">3 reviews</p>
+                        <p class="pull-right"><?= $nbCom ?> reviews</p>
                         <p>
-                            <span class="glyphicon glyphicon-star"></span>
-                            <span class="glyphicon glyphicon-star"></span>
-                            <span class="glyphicon glyphicon-star"></span>
-                            <span class="glyphicon glyphicon-star"></span>
-                            <span class="glyphicon glyphicon-star-empty"></span>
-                            4.0 stars
+                     <?php for ($i=1; $i <= $moyNote->note; $i++) { 
+                                echo '<span class="glyphicon glyphicon-star"></span>';
+                                $star=$i;
+                            }
+                            $starEmpty = 5-$star;
+                            for ($j=1; $j <= $starEmpty; $j++) { 
+                                echo '<span class="glyphicon glyphicon-star-empty"></span>';
+                            }
+                            echo ' '.$moyNote->note ?> stars
                         </p>
                     </div>
                 </div>
@@ -34,7 +37,9 @@ $data = array('name'=>'autor','placeholder'=>'Auteur', 'class'=>'form-control', 
 $data2 = array('name'=>'note', 'type'=>'number', 'placeholder'=>'Note', 'class'=>'form-control', 'value'=>set_value('note'));
 $data3 = array('name'=>'content','placeholder'=>'Commentaire', 'class'=>'form-control', 'value'=>set_value('content'));
 $data4 = array('name'=>'submit', 'class'=>'btn btn-success', 'value'=>'Envoyer commentaire');
-echo form_Open ('produit/information/'.$produit->id).
+echo '<div class="alert alert-success" role="alert">'.
+$this->session->flashdata('success_com').'</div>'.
+form_Open ('produit/information/'.$produit->id).
 //validation_errors().
 form_input ($data).
 //form_error('autor', '<div class="text-danger">', '</div>').
@@ -63,50 +68,27 @@ form_error('content', '<p class="text-danger">', '</p>');
                         <a class="btn btn-success">Leave a Review</a>
                     </div>
 
-                    <hr>
-
-                    <div class="row">
-                        <div class="col-md-12">
-                            <span class="glyphicon glyphicon-star"></span>
-                            <span class="glyphicon glyphicon-star"></span>
-                            <span class="glyphicon glyphicon-star"></span>
-                            <span class="glyphicon glyphicon-star"></span>
-                            <span class="glyphicon glyphicon-star-empty"></span>
-                            Anonymous
-                            <span class="pull-right">10 days ago</span>
-                            <p>This product was great in terms of quality. I would definitely buy another!</p>
-                        </div>
-                    </div>
+<?php           foreach ($commentaire as $key => $value) : ?>
 
                     <hr>
 
                     <div class="row">
                         <div class="col-md-12">
-                            <span class="glyphicon glyphicon-star"></span>
-                            <span class="glyphicon glyphicon-star"></span>
-                            <span class="glyphicon glyphicon-star"></span>
-                            <span class="glyphicon glyphicon-star"></span>
-                            <span class="glyphicon glyphicon-star-empty"></span>
-                            Anonymous
-                            <span class="pull-right">12 days ago</span>
-                            <p>I've alredy ordered another one!</p>
+                            <?php for ($i=1; $i <= $value->note; $i++) { 
+                                echo '<span class="glyphicon glyphicon-star"></span>';
+                                $star=$i;
+                            }
+                            $starEmpty = 5-$star;
+                            for ($j=1; $j <= $starEmpty; $j++) { 
+                                echo '<span class="glyphicon glyphicon-star-empty"></span>';
+                            } ?>
+                            <?= $value->auteur ?>
+                            <span class="pull-right"><?= $value->dateCommentaire ?></span>
+                            <p><?= $value->contenu ?></p>
                         </div>
                     </div>
+<?php           endforeach; ?>
 
-                    <hr>
-
-                    <div class="row">
-                        <div class="col-md-12">
-                            <span class="glyphicon glyphicon-star"></span>
-                            <span class="glyphicon glyphicon-star"></span>
-                            <span class="glyphicon glyphicon-star"></span>
-                            <span class="glyphicon glyphicon-star"></span>
-                            <span class="glyphicon glyphicon-star-empty"></span>
-                            Anonymous
-                            <span class="pull-right">15 days ago</span>
-                            <p>I've seen some better than this, but not at this price. I definitely recommend this item.</p>
-                        </div>
-                    </div>
 
                 </div>
 

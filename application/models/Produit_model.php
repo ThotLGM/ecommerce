@@ -46,4 +46,19 @@ class Produit_model extends CI_Model	{
 		$requete = $this->db->get_where('produit', array('produit.id' => $idProduit));
 		return $requete->unbuffered_row('Produit_model');
 	}
+
+	public function countCom($idProduit)	{
+		$this->db->count_all_results('commentaire');  // Produces an integer, like 25
+		$this->db->like('produit_id', $idProduit);
+		$this->db->from('commentaire');
+		return $this->db->count_all_results();
+		//var_dump($requete);
+	}
+
+	public function moyNote($idProduit)	{
+		$requete =$this->db->select_avg('note');
+		$requete = $this->db->get_where('commentaire', array('produit_id' => $idProduit));
+		return $requete->unbuffered_row('Produit_model');
+		//var_dump($requete->unbuffered_row('Produit_model'));
+	}
 }

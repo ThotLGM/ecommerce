@@ -23,8 +23,14 @@ class Produit extends CI_Controller {
 		//var_dump($idProduit);
 		$this->load->helper('form', 'url');
 		$this->load->model('Produit_model');
+        $this->load->model('Commentaire_model');
 		$produit = $this->Produit_model->findProduit($idProduit);
-
+		$moyNote = $this->Produit_model->moyNote($idProduit);
+		$nbCom = $this->Produit_model->countCom($idProduit);
+		$commentaire = $this->Commentaire_model->AfficheCommentaire($idProduit);
+		if (empty($produit))	{
+			show_404();
+		}
 		$this->load->view('globals/header');
 		$this->load->view('globals/sidebar');
 
@@ -35,7 +41,6 @@ class Produit extends CI_Controller {
 		$this->form_validation->set_rules('content', 'Un commentaire doit être rentré', 'required|max_length[500]');
 
 		if ($this->form_validation->run() == TRUE)	{
-       		$this->load->model('Commentaire_model');
        		$data = array(
 		        'auteur' => $this->input->post('autor'),
 		        'contenu' => $this->input->post('content'),
@@ -44,8 +49,14 @@ class Produit extends CI_Controller {
 		        'produit_id' => $idProduit
 			);
 			$this->Commentaire_model->insertCommentaire($data);
+			$this->session->set_flashdata('success_com', 'Votre commentaire a bien été ajouté');
+			redirect('produit/information/'.$idProduit);
         }
-		$this->load->view('produit/produit', ['produit'=>$produit]);
+		$this->load->view('produit/produit', 
+			['produit'=>$produit, 
+			'commentaire'=>$commentaire,
+			'nbCom'=>$nbCom,
+			'moyNote'=>$moyNote]);
 		$this->load->view('globals/footer');
 	}
 }
